@@ -55,3 +55,21 @@ Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
 2026-06-13 16:39:00.246 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/favicon-16x16.png - null null
 2026-06-13 16:39:00.261 +05:00 [INF] Sending file. Request path: '/favicon-16x16.png'. Physical path: 'N/A'
 2026-06-13 16:39:00.269 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/favicon-16x16.png - 200 665 image/png 23.7423ms
+2026-06-13 17:38:30.878 +05:00 [INF] Application starting up
+2026-06-13 17:38:35.331 +05:00 [INF] Now listening on: https://localhost:7174
+2026-06-13 17:38:35.339 +05:00 [INF] Now listening on: http://localhost:5222
+2026-06-13 17:38:35.542 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-13 17:38:35.547 +05:00 [INF] Hosting environment: Development
+2026-06-13 17:38:35.550 +05:00 [INF] Content root path: D:\Coding\Exam\G13Exam\G13Exam\Exam.Api
+2026-06-13 17:38:37.638 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/index.html - null null
+2026-06-13 17:38:38.709 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/index.html - 200 null text/html;charset=utf-8 1083.5328ms
+2026-06-13 17:38:38.759 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/_framework/aspnetcore-browser-refresh.js - null null
+2026-06-13 17:38:38.775 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/_framework/aspnetcore-browser-refresh.js - 200 14921 application/javascript; charset=utf-8 15.9365ms
+2026-06-13 17:38:38.853 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/_vs/browserLink - null null
+2026-06-13 17:38:38.965 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/_vs/browserLink - 200 null text/javascript; charset=UTF-8 113.3058ms
+2026-06-13 17:38:39.233 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/v1/swagger.json - null null
+2026-06-13 17:38:39.284 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 51.5225ms
+2026-06-13 17:39:34.167 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/_framework/aspnetcore-browser-refresh.js - null null
+2026-06-13 17:39:34.181 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/_framework/aspnetcore-browser-refresh.js - 200 14921 application/javascript; charset=utf-8 14.61ms
+2026-06-13 17:39:34.500 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/v1/swagger.json - null null
+2026-06-13 17:39:34.552 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 53.426ms
