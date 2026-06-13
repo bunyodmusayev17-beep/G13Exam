@@ -2,7 +2,7 @@ namespace Exam.Api.Entities
 {
     public class Food
     {
-        public int Id { get; set; }
+        public int FoodId { get; set; }
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
         public decimal Price { get; set; }
