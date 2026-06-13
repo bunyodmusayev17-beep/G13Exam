@@ -1,4 +1,5 @@
 ﻿using Exam.Api.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exam.Api.Repositories;
 
