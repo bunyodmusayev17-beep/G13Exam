@@ -1,7 +1,6 @@
 using Exam.Api.Dtos;
 using Exam.Api.Mappings;
 using Exam.Api.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace Exam.Api.Services;
 
@@ -14,60 +13,21 @@ public class CategoryService : ICategoryService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<IReadOnlyCollection<CategoryDto>> GetAllAsync()
+    public async Task<List<CategoryDto>> GetCategoriesAsync()
     {
-        var categories = await _categoryRepository.GetAllQuery().AsNoTracking().ToListAsync();
-        return categories.Select(category => category.ToDto()).ToList();
+        var categories = await _categoryRepository.GetAllAsync();
+
+        return categories
+            .Select(category => category.ToDto())
+            .ToList();
     }
 
-    public async Task<CategoryDto?> GetByIdAsync(int id)
-    {
-        var category = await _categoryRepository.GetAllQuery()
-            .AsNoTracking()
-            .FirstOrDefaultAsync(categoryItem => categoryItem.Id == id);
-
-        return category?.ToDto();
-    }
-
-    public async Task<CategoryDto?> CreateAsync(CategoryCreateDto dto)
+    public async Task<CategoryDto> CreateCategoryAsync(CategoryCreateDto dto)
     {
         var category = dto.ToEntity();
-        await _categoryRepository.AddAsync(category);
-        await _categoryRepository.SaveChangesAsync();
 
-        return category.ToDto();
-    }
+        var createdCategory = await _categoryRepository.CreateAsync(category);
 
-    public async Task<CategoryDto?> UpdateAsync(int id, CategoryUpdateDto dto)
-    {
-        var category = await _categoryRepository.GetAllQuery().FirstOrDefaultAsync(categoryItem => categoryItem.Id == id);
-        if (category == null)
-        {
-            return null;
-        }
-
-        category.ToUpdateEntity(dto);
-        _categoryRepository.Update(category);
-        await _categoryRepository.SaveChangesAsync();
-
-        return category.ToDto();
-    }
-
-    public async Task<bool> DeleteAsync(int id)
-    {
-        var category = await _categoryRepository.GetAllQuery().FirstOrDefaultAsync(categoryItem => categoryItem.Id == id);
-        if (category == null)
-        {
-            return false;
-        }
-
-        _categoryRepository.Delete(category);
-        await _categoryRepository.SaveChangesAsync();
-        return true;
-    }
-
-    public async Task<bool> ExistsAsync(int id)
-    {
-        return await _categoryRepository.GetAllQuery().AnyAsync(category => category.Id == id);
+        return createdCategory.ToDto();
     }
 }
