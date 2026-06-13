@@ -9,12 +9,12 @@ public static class FoodMapper
     {
         return new FoodDto
         {
-            FoodId = (int)food.FoodId,
+            FoodId = food.Id,
             Name = food.Name,
-            Description = food.Discription,
+            Description = food.Description,
             Price = food.Price,
             IsAvailable = food.IsAvailable,
-            CategoryId = (int)food.CategoryId
+            CategoryId = food.CategoryId
         };
     }
 
@@ -23,7 +23,7 @@ public static class FoodMapper
         return new Food
         {
             Name = dto.Name,
-            Discription = dto.Description,
+            Description = dto.Description,
             Price = dto.Price,
             IsAvailable = dto.IsAvailable,
             CategoryId = dto.CategoryId
@@ -33,7 +33,7 @@ public static class FoodMapper
     public static void ToUpdateEntity(this Food food, FoodUpdateDto dto)
     {
         food.Name = dto.Name;
-        food.Discription = dto.Description;
+        food.Description = dto.Description;
         food.Price = dto.Price;
         food.IsAvailable = dto.IsAvailable;
         food.CategoryId = dto.CategoryId;
