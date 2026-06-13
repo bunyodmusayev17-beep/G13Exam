@@ -1,7 +1,9 @@
-﻿namespace Exam.Api.Entities;
-
-public class Category
+namespace Exam.Api.Entities
 {
-    public long CategoryId { get; set; }
-    public string Name { get; set; }
+    public class Category
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = null!;
+        public ICollection<Food> Foods { get; set; } = new List<Food>();
+    }
 }

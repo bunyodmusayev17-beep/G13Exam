@@ -1,4 +1,7 @@
 using Serilog;
+using Exam.Api.Configurations;
+using Exam.Api.Repositories;
+using FluentValidation;
 
 namespace Exam.Api
 {
@@ -19,8 +22,10 @@ namespace Exam.Api
                 var builder = WebApplication.CreateBuilder(args);
 
                 builder.Host.UseSerilog();
-
+                builder.ConfigureDB();
                 builder.Services.AddControllers();
+                builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+                builder.Services.AddValidatorsFromAssemblyContaining<Program>();
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();
 

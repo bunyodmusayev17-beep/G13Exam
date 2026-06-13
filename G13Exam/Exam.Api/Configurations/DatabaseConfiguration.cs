@@ -7,13 +7,9 @@ public static class DatabaseConfigurations
 {
     public static void ConfigureDB(this WebApplicationBuilder builder)
     {
-        var connectionString = builder.Configuration.GetConnectionString("DatabaseConnection");
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
         builder.Services.AddDbContext<AppDbContext>(options =>
-          options.UseSqlServer(connectionString));
-
-
-
-
+            options.UseSqlServer(connectionString));
     }
 }
