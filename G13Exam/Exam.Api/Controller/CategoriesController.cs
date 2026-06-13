@@ -1,9 +1,8 @@
 using Exam.Api.Dtos;
 using Exam.Api.Entities;
-using Exam.Api.Repositories;
+using Exam.Api.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Exam.Api.Controller
 {
@@ -11,45 +10,32 @@ namespace Exam.Api.Controller
     [Route("categories")]
     public class CategoriesController : ControllerBase
     {
-        private readonly IBaseRepository<Category> _categoryRepository;
+        private readonly ICategoryService _categoryService;
         private readonly IValidator<CategoryCreateDto> _categoryCreateValidator;
         private readonly IValidator<CategoryUpdateDto> _categoryUpdateValidator;
 
         public CategoriesController(
-            IBaseRepository<Category> categoryRepository,
+            ICategoryService categoryService,
             IValidator<CategoryCreateDto> categoryCreateValidator,
             IValidator<CategoryUpdateDto> categoryUpdateValidator)
         {
-            _categoryRepository = categoryRepository;
+            _categoryService = categoryService;
             _categoryCreateValidator = categoryCreateValidator;
             _categoryUpdateValidator = categoryUpdateValidator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoryReadDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAll()
         {
-            var categories = await _categoryRepository.GetAllQuery()
-                .Select(c => new CategoryReadDto
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .ToListAsync();
+            var categories = await _categoryService.GetAllAsync();
 
             return Ok(categories);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoryReadDto>> GetById(int id)
+        public async Task<ActionResult<CategoryDto>> GetById(int id)
         {
-            var category = await _categoryRepository.GetAllQuery()
-                .Where(c => c.Id == id)
-                .Select(c => new CategoryReadDto
-                {
-                    Id = c.Id,
-                    Name = c.Name
-                })
-                .FirstOrDefaultAsync();
+            var category = await _categoryService.GetByIdAsync(id);
 
             if (category == null)
             {
@@ -60,7 +46,7 @@ namespace Exam.Api.Controller
         }
 
         [HttpPost]
-        public async Task<ActionResult<CategoryReadDto>> Create(CategoryCreateDto dto)
+        public async Task<ActionResult<CategoryDto>> Create(CategoryCreateDto dto)
         {
             var validationResult = await _categoryCreateValidator.ValidateAsync(dto);
             if (!validationResult.IsValid)
@@ -68,19 +54,13 @@ namespace Exam.Api.Controller
                 return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
-            var category = new Category
+            var category = await _categoryService.CreateAsync(dto);
+            if (category == null)
             {
-                Name = dto.Name
-            };
+                return BadRequest("Category could not be created.");
+            }
 
-            await _categoryRepository.AddAsync(category);
-            await _categoryRepository.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetById), new { id = category.Id }, new CategoryReadDto
-            {
-                Id = category.Id,
-                Name = category.Name
-            });
+            return CreatedAtAction(nameof(GetById), new { id = category.CategoryId }, category);
         }
 
         [HttpPut("{id}")]
@@ -92,15 +72,13 @@ namespace Exam.Api.Controller
                 return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
-            var category = await _categoryRepository.GetAllQuery().FirstOrDefaultAsync(c => c.Id == id);
+            var category = await _categoryService.GetByIdAsync(id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            category.Name = dto.Name;
-            _categoryRepository.Update(category);
-            await _categoryRepository.SaveChangesAsync();
+            await _categoryService.UpdateAsync(id, dto);
 
             return NoContent();
         }
@@ -108,14 +86,11 @@ namespace Exam.Api.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var category = await _categoryRepository.GetAllQuery().FirstOrDefaultAsync(c => c.Id == id);
-            if (category == null)
+            var deleted = await _categoryService.DeleteAsync(id);
+            if (!deleted)
             {
                 return NotFound();
             }
-
-            _categoryRepository.Delete(category);
-            await _categoryRepository.SaveChangesAsync();
 
             return NoContent();
         }
