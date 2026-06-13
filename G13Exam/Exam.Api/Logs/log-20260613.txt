@@ -1,0 +1,57 @@
+2026-06-13 16:35:40.842 +05:00 [INF] Application starting up
+2026-06-13 16:35:42.408 +05:00 [FTL] Application failed to start
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Exam.Api.Program.Main(String[] args) in D:\Coding\Exam\G13Exam\G13Exam\Exam.Api\Program.cs:line 32
+2026-06-13 16:36:07.509 +05:00 [INF] Application starting up
+2026-06-13 16:36:07.641 +05:00 [FTL] Application failed to start
+Microsoft.Extensions.Hosting.HostAbortedException: The host was aborted.
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.ThrowHostAborted()
+   at Microsoft.Extensions.Hosting.HostFactoryResolver.HostingListener.OnNext(KeyValuePair`2 value)
+   at System.Diagnostics.DiagnosticListener.Write(String name, Object value)
+   at Microsoft.Extensions.Hosting.HostBuilder.ResolveHost(IServiceProvider serviceProvider, DiagnosticListener diagnosticListener)
+   at Microsoft.Extensions.Hosting.HostApplicationBuilder.Build()
+   at Microsoft.AspNetCore.Builder.WebApplicationBuilder.Build()
+   at Exam.Api.Program.Main(String[] args) in D:\Coding\Exam\G13Exam\G13Exam\Exam.Api\Program.cs:line 32
+2026-06-13 16:37:54.717 +05:00 [INF] Application starting up
+2026-06-13 16:37:55.255 +05:00 [INF] Now listening on: http://localhost:5222
+2026-06-13 16:37:55.262 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-13 16:37:55.264 +05:00 [INF] Hosting environment: Development
+2026-06-13 16:37:55.265 +05:00 [INF] Content root path: D:\Coding\Exam\G13Exam\G13Exam\Exam.Api
+2026-06-13 16:38:28.132 +05:00 [INF] Application is shutting down...
+2026-06-13 16:38:47.969 +05:00 [INF] Application starting up
+2026-06-13 16:38:51.336 +05:00 [INF] Now listening on: https://localhost:7174
+2026-06-13 16:38:51.351 +05:00 [INF] Now listening on: http://localhost:5222
+2026-06-13 16:38:51.620 +05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-06-13 16:38:51.641 +05:00 [INF] Hosting environment: Development
+2026-06-13 16:38:51.723 +05:00 [INF] Content root path: D:\Coding\Exam\G13Exam\G13Exam\Exam.Api
+2026-06-13 16:38:56.753 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger - null null
+2026-06-13 16:38:57.399 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger - 301 null null 679.0175ms
+2026-06-13 16:38:57.437 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/index.html - null null
+2026-06-13 16:38:57.822 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/index.html - 200 null text/html;charset=utf-8 384.776ms
+2026-06-13 16:38:57.914 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/swagger-ui.css - null null
+2026-06-13 16:38:57.916 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/swagger-ui-bundle.js - null null
+2026-06-13 16:38:57.920 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/_framework/aspnetcore-browser-refresh.js - null null
+2026-06-13 16:38:58.441 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/_vs/browserLink - null null
+2026-06-13 16:38:57.916 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/swagger-ui-standalone-preset.js - null null
+2026-06-13 16:38:58.585 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/_framework/aspnetcore-browser-refresh.js - 200 14921 application/javascript; charset=utf-8 665.9823ms
+2026-06-13 16:38:58.574 +05:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2026-06-13 16:38:58.680 +05:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2026-06-13 16:38:58.701 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/swagger-ui.css - 200 152034 text/css 785.2961ms
+2026-06-13 16:38:58.714 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/swagger-ui-standalone-preset.js - 200 230280 text/javascript 797.3443ms
+2026-06-13 16:38:58.775 +05:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2026-06-13 16:38:58.782 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/swagger-ui-bundle.js - 200 1456926 text/javascript 866.3872ms
+2026-06-13 16:38:59.118 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/_vs/browserLink - 200 null text/javascript; charset=UTF-8 677.0723ms
+2026-06-13 16:38:59.372 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/v1/swagger.json - null null
+2026-06-13 16:38:59.493 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 122.3074ms
+2026-06-13 16:38:59.690 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/favicon-32x32.png - null null
+2026-06-13 16:38:59.716 +05:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2026-06-13 16:38:59.731 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/favicon-32x32.png - 200 628 image/png 44.4353ms
+2026-06-13 16:39:00.246 +05:00 [INF] Request starting HTTP/2 GET https://localhost:7174/swagger/favicon-16x16.png - null null
+2026-06-13 16:39:00.261 +05:00 [INF] Sending file. Request path: '/favicon-16x16.png'. Physical path: 'N/A'
+2026-06-13 16:39:00.269 +05:00 [INF] Request finished HTTP/2 GET https://localhost:7174/swagger/favicon-16x16.png - 200 665 image/png 23.7423ms
