@@ -25,15 +25,5 @@
 		<PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.2.2" />
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
 	</ItemGroup>
-	<ItemGroup>
-	  <Folder Include="Entities\" />
-	  <Folder Include="Mappings\" />
-	  <Folder Include="Controller\" />
-	  <Folder Include="Dtos\" />
-	  <Folder Include="FluentApies\" />
-	  <Folder Include="Migrations\" />
-	  <Folder Include="Validators\" />
-	  <Folder Include="Services\" />
-	</ItemGroup>
 
 </Project>
