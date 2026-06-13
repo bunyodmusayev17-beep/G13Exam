@@ -1,7 +1,6 @@
 using Serilog;
 using Exam.Api.Configurations;
 using Exam.Api.Repositories;
-using Exam.Api.Services;
 using FluentValidation;
 
 namespace Exam.Api
@@ -25,10 +24,7 @@ namespace Exam.Api
                 builder.Host.UseSerilog();
                 builder.ConfigureDB();
                 builder.Services.AddControllers();
-                builder.Services.AddScoped<IFoodRepository, FoodRepository>();
-                builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-                builder.Services.AddScoped<IFoodService, FoodService>();
-                builder.Services.AddScoped<ICategoryService, CategoryService>();
+                builder.Services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
                 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
                 builder.Services.AddEndpointsApiExplorer();
                 builder.Services.AddSwaggerGen();

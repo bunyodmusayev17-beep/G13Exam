@@ -1,8 +1,9 @@
 using Exam.Api.Dtos;
 using Exam.Api.Entities;
-using Exam.Api.Services;
+using Exam.Api.Repositories;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Exam.Api.Controller
 {
@@ -10,64 +11,123 @@ namespace Exam.Api.Controller
     [Route("foods")]
     public class FoodsController : ControllerBase
     {
-        private readonly IFoodService _foodService;
-        private readonly ICategoryService _categoryService;
+        private readonly IBaseRepository<Food> _foodRepository;
+        private readonly IBaseRepository<Category> _categoryRepository;
         private readonly IValidator<FoodCreateDto> _foodCreateValidator;
         private readonly IValidator<FoodUpdateDto> _foodUpdateValidator;
 
         public FoodsController(
-            IFoodService foodService,
-            ICategoryService categoryService,
+            IBaseRepository<Food> foodRepository,
+            IBaseRepository<Category> categoryRepository,
             IValidator<FoodCreateDto> foodCreateValidator,
             IValidator<FoodUpdateDto> foodUpdateValidator)
         {
-            _foodService = foodService;
-            _categoryService = categoryService;
+            _foodRepository = foodRepository;
+            _categoryRepository = categoryRepository;
             _foodCreateValidator = foodCreateValidator;
             _foodUpdateValidator = foodUpdateValidator;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAll()
+        public async Task<ActionResult<IEnumerable<FoodReadDto>>> GetAll()
         {
-            var foods = await _foodService.GetAllAsync();
+            var foods = await _foodRepository.GetAllQuery()
+                .Include(f => f.Category)
+                .Select(f => new FoodReadDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Price = f.Price,
+                    IsAvailable = f.IsAvailable,
+                    CategoryId = f.CategoryId,
+                    CategoryName = f.Category.Name
+                })
+                .ToListAsync();
 
             return Ok(foods);
         }
 
         [HttpGet("available")]
-        public async Task<ActionResult<IEnumerable<FoodDto>>> GetAvailable()
+        public async Task<ActionResult<IEnumerable<FoodReadDto>>> GetAvailable()
         {
-            var foods = await _foodService.GetAvailableAsync();
+            var foods = await _foodRepository.GetAllQuery()
+                .Where(f => f.IsAvailable)
+                .Include(f => f.Category)
+                .Select(f => new FoodReadDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Price = f.Price,
+                    IsAvailable = f.IsAvailable,
+                    CategoryId = f.CategoryId,
+                    CategoryName = f.Category.Name
+                })
+                .ToListAsync();
 
             return Ok(foods);
         }
 
         [HttpGet("search")]
-        public async Task<ActionResult<IEnumerable<FoodDto>>> Search([FromQuery] string? name)
+        public async Task<ActionResult<IEnumerable<FoodReadDto>>> Search([FromQuery] string? name)
         {
             if (string.IsNullOrWhiteSpace(name))
             {
                 return BadRequest("Query parameter 'name' is required.");
             }
 
-            var foods = await _foodService.SearchAsync(name);
+            var normalized = name.Trim();
+            var foods = await _foodRepository.GetAllQuery()
+                .Where(f => f.Name.Contains(normalized, StringComparison.OrdinalIgnoreCase))
+                .Include(f => f.Category)
+                .Select(f => new FoodReadDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Price = f.Price,
+                    IsAvailable = f.IsAvailable,
+                    CategoryId = f.CategoryId,
+                    CategoryName = f.Category.Name
+                })
+                .ToListAsync();
 
             return Ok(foods);
         }
 
         [HttpGet("category/{categoryId}")]
-        public async Task<ActionResult<IEnumerable<FoodDto>>> GetByCategory(int categoryId)
+        public async Task<ActionResult<IEnumerable<FoodReadDto>>> GetByCategory(int categoryId)
         {
-            var foods = await _foodService.GetByCategoryAsync(categoryId);
+            var foods = await _foodRepository.GetAllQuery()
+                .Where(f => f.CategoryId == categoryId)
+                .Include(f => f.Category)
+                .Select(f => new FoodReadDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Price = f.Price,
+                    IsAvailable = f.IsAvailable,
+                    CategoryId = f.CategoryId,
+                    CategoryName = f.Category.Name
+                })
+                .ToListAsync();
 
             return Ok(foods);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FoodDto>> GetById(int id)
+        public async Task<ActionResult<FoodReadDto>> GetById(int id)
         {
-            var food = await _foodService.GetByIdAsync(id);
+            var food = await _foodRepository.GetAllQuery()
+                .Include(f => f.Category)
+                .Select(f => new FoodReadDto
+                {
+                    Id = f.Id,
+                    Name = f.Name,
+                    Price = f.Price,
+                    IsAvailable = f.IsAvailable,
+                    CategoryId = f.CategoryId,
+                    CategoryName = f.Category.Name
+                })
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (food == null)
             {
@@ -78,7 +138,7 @@ namespace Exam.Api.Controller
         }
 
         [HttpPost]
-        public async Task<ActionResult<FoodDto>> Create(FoodCreateDto dto)
+        public async Task<ActionResult<FoodReadDto>> Create(FoodCreateDto dto)
         {
             var validationResult = await _foodCreateValidator.ValidateAsync(dto);
             if (!validationResult.IsValid)
@@ -86,19 +146,37 @@ namespace Exam.Api.Controller
                 return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
-            var categoryExists = await _categoryService.ExistsAsync(dto.CategoryId);
+            var categoryExists = await _categoryRepository.GetAllQuery().AnyAsync(c => c.Id == dto.CategoryId);
             if (!categoryExists)
             {
                 return BadRequest("Category does not exist.");
             }
 
-            var createdDto = await _foodService.CreateAsync(dto);
-            if (createdDto == null)
+            var food = new Food
             {
-                return BadRequest("Food could not be created.");
-            }
+                Name = dto.Name,
+                Price = dto.Price,
+                IsAvailable = dto.IsAvailable,
+                CategoryId = dto.CategoryId
+            };
 
-            return CreatedAtAction(nameof(GetById), new { id = createdDto.FoodId }, createdDto);
+            await _foodRepository.AddAsync(food);
+            await _foodRepository.SaveChangesAsync();
+
+            var createdDto = new FoodReadDto
+            {
+                Id = food.Id,
+                Name = food.Name,
+                Price = food.Price,
+                IsAvailable = food.IsAvailable,
+                CategoryId = food.CategoryId,
+                CategoryName = await _categoryRepository.GetAllQuery()
+                    .Where(c => c.Id == food.CategoryId)
+                    .Select(c => c.Name)
+                    .FirstOrDefaultAsync() ?? string.Empty
+            };
+
+            return CreatedAtAction(nameof(GetById), new { id = food.Id }, createdDto);
         }
 
         [HttpPut("{id}")]
@@ -110,19 +188,25 @@ namespace Exam.Api.Controller
                 return BadRequest(validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
-            var food = await _foodService.GetByIdAsync(id);
+            var food = await _foodRepository.GetAllQuery().FirstOrDefaultAsync(f => f.Id == id);
             if (food == null)
             {
                 return NotFound();
             }
 
-            var categoryExists = await _categoryService.ExistsAsync(dto.CategoryId);
+            var categoryExists = await _categoryRepository.GetAllQuery().AnyAsync(c => c.Id == dto.CategoryId);
             if (!categoryExists)
             {
                 return BadRequest("Category does not exist.");
             }
 
-            await _foodService.UpdateAsync(id, dto);
+            food.Name = dto.Name;
+            food.Price = dto.Price;
+            food.IsAvailable = dto.IsAvailable;
+            food.CategoryId = dto.CategoryId;
+
+            _foodRepository.Update(food);
+            await _foodRepository.SaveChangesAsync();
 
             return NoContent();
         }
@@ -130,11 +214,14 @@ namespace Exam.Api.Controller
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _foodService.DeleteAsync(id);
-            if (!deleted)
+            var food = await _foodRepository.GetAllQuery().FirstOrDefaultAsync(f => f.Id == id);
+            if (food == null)
             {
                 return NotFound();
             }
+
+            _foodRepository.Delete(food);
+            await _foodRepository.SaveChangesAsync();
 
             return NoContent();
         }
