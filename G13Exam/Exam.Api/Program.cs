@@ -34,6 +34,8 @@ namespace Exam.Api
                 builder.Services.AddSwaggerGen();
 
                 var app = builder.Build();
+                builder.ConfigureDB();
+                builder.ConfigureRepository();
 
                 if (app.Environment.IsDevelopment())
                 {

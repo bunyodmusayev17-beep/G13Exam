@@ -9,7 +9,7 @@ namespace Exam.Api.FluentApies
         public void Configure(EntityTypeBuilder<Food> builder)
         {
             builder.ToTable("Foods");
-            builder.HasKey(f => f.Id);
+            builder.HasKey(f => f.FoodId);
             builder.Property(f => f.Name)
                 .IsRequired()
                 .HasMaxLength(100);
