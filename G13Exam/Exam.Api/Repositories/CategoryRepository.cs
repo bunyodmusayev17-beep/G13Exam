@@ -1,4 +1,4 @@
-﻿using Exam.Api.Data;
+using Exam.Api.Data;
 using Exam.Api.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -28,7 +28,23 @@ public class CategoryRepository : ICategoryRepository
     {
         await _context.Categories.AddAsync(category);
         await _context.SaveChangesAsync();
-
         return category;
+    }
+
+    public async Task<Category> UpdateAsync(Category category)
+    {
+        _context.Categories.Update(category);
+        await _context.SaveChangesAsync();
+        return category;
+    }
+
+    public async Task<bool> DeleteAsync(long id)
+    {
+        var category = await _context.Categories
+            .FirstOrDefaultAsync(c => c.CategoryId == id);
+        if (category is null) return false;
+        _context.Categories.Remove(category);
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

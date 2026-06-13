@@ -9,7 +9,7 @@ public static class FoodMapper
     {
         return new FoodDto
         {
-            FoodId = food.Id,
+            FoodId = food.FoodId,
             Name = food.Name,
             Description = food.Description,
             Price = food.Price,

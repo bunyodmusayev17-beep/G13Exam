@@ -9,7 +9,7 @@ public static class CategoryMapper
     {
         return new CategoryDto
         {
-            CategoryId = category.Id,
+            CategoryId = category.CategoryId,
             Name = category.Name
         };
     }
