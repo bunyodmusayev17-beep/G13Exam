@@ -13,21 +13,42 @@ public class CategoryService : ICategoryService
         _categoryRepository = categoryRepository;
     }
 
-    public async Task<List<CategoryDto>> GetCategoriesAsync()
+    public async Task<IReadOnlyCollection<CategoryDto>> GetAllAsync()
     {
         var categories = await _categoryRepository.GetAllAsync();
-
-        return categories
-            .Select(category => category.ToDto())
-            .ToList();
+        return categories.Select(c => c.ToDto()).ToList();
     }
 
-    public async Task<CategoryDto> CreateCategoryAsync(CategoryCreateDto dto)
+    public async Task<CategoryDto?> GetByIdAsync(int id)
+    {
+        var category = await _categoryRepository.GetByIdAsync(id);
+        return category?.ToDto();
+    }
+
+    public async Task<CategoryDto?> CreateAsync(CategoryCreateDto dto)
     {
         var category = dto.ToEntity();
+        var created = await _categoryRepository.CreateAsync(category);
+        return created.ToDto();
+    }
 
-        var createdCategory = await _categoryRepository.CreateAsync(category);
+    public async Task<CategoryDto?> UpdateAsync(int id, CategoryUpdateDto dto)
+    {
+        var category = await _categoryRepository.GetByIdAsync(id);
+        if (category == null) return null;
+        category.ToUpdateEntity(dto);
+        var updated = await _categoryRepository.UpdateAsync(category);
+        return updated.ToDto();
+    }
 
-        return createdCategory.ToDto();
+    public async Task<bool> DeleteAsync(int id)
+    {
+        return await _categoryRepository.DeleteAsync(id);
+    }
+
+    public async Task<bool> ExistsAsync(int id)
+    {
+        var category = await _categoryRepository.GetByIdAsync(id);
+        return category != null;
     }
 }
