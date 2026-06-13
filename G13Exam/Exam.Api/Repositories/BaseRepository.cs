@@ -1,4 +1,6 @@
-﻿namespace Exam.Api.Repositories;
+﻿using Exam.Api.Data;
+
+namespace Exam.Api.Repositories;
 
 public class BaseRepository<T> : IBaseRepository<T> where T : class
 {

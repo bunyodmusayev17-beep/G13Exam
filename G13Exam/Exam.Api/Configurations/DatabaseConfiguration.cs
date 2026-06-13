@@ -1,4 +1,7 @@
-﻿namespace Exam.Api.Configurations;
+﻿using Exam.Api.Data;
+using Microsoft.EntityFrameworkCore;
+
+namespace Exam.Api.Configurations;
 
 public static class DatabaseConfigurations
 {
